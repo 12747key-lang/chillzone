@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chill Zone — зона отдыха геймера</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #0b0f1c 0%, #1a1f2f 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .app {
+      max-width: 1100px;
+      width: 100%;
+      background: rgba(18, 22, 33, 0.8);
+      backdrop-filter: blur(12px);
+      border-radius: 48px;
+      padding: 32px;
+      box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(90, 140, 255, 0.2);
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      text-align: center;
+      background: linear-gradient(135deg, #a0c8ff, #6d8cff, #b48aff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 20px rgba(100, 150, 255, 0.3);
+    }
+
+    .subhead {
+      text-align: center;
+      color: #8a9bb5;
+      margin-bottom: 32px;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(100, 150, 255, 0.2);
+      padding-bottom: 16px;
+    }
+
+    /* Вкладки */
+    .tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: #1e2438;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #9aaec9;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 8px 0 #0b0e16, 0 5px 15px rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn i {
+      font-size: 1.3rem;
+    }
+
+    .tab-btn:hover {
+      background: #2a314a;
+      color: #d0e0ff;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 0 #0b0e16, 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(145deg, #3c4b7a, #2a3560);
+      color: white;
+      box-shadow: 0 5px 0 #121724, 0 8px 20px #2f4bff40;
+      transform: translateY(2px);
+    }
+
+    /* Контент вкладок */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Таймер и секундомер */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    @media (max-width: 700px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .app {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+
+    .card {
+      background: #111725;
+      border-radius: 32px;
+      padding: 28px 20px;
+      box-shadow: inset 0 0 0 1px #2a3350, 0 20px 30px -15px black;
+      transition: 0.2s;
+    }
+
+    .card h2 {
+      color: #c6d9ff;
+      font-size: 1.6rem;
+      font-weight: 500;
+      text-align: center;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .time-display {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 3.8rem;
+      font-weight: 700;
+      text-align: center;
+      color: #e0edff;
+      text-shadow: 0 0 25px #4f7eff, 0 0 8px #2a4bff;
+      background: #0b0e17;
+      padding: 16px 8px;
+      border-radius: 28px;
+      margin-bottom: 28px;
+      letter-spacing: 6px;
+      border: 1px solid #2e3e6b;
+      box-shadow: inset 0 8px 12px rgba(0, 0, 0, 0.7);
+      word-break: break-word;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: #20283f;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 40px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #b8cbff;
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 0 5px 0 #0e121f, 0 6px 12px black;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.3px;
+      flex: 0 1 auto;
+    }
+
+    .btn:hover {
+      background: #2e3857;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 #0e121f, 0 10px 18px black;
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #0e121f, 0 6px 12px black;
+    }
+
+    .btn-primary {
+      background: linear-gradient(145deg, #3466e0, #1f44a0);
+      color: white;
+      box-shadow: 0 5px 0 #0e1a3a, 0 8px 18px #1f44a080;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(145deg, #4076ff, #2a55c0);
+    }
+
+    .btn-danger {
+      background: #aa3f5e;
+      color: #ffe5ec;
+      box-shadow: 0 5px 0 #571f2f;
+    }
+
+    .btn-danger:hover {
+      background: #c94f72;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: 0 5px 0 #0e121f !important;
+    }
+
+    /* колесо фортуны */
+    .fortune-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 0;
+    }
+
+    .fortune-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #a0c8ff, #6d8cff, #b48aff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 16px;
+      text-align: center;
+      text-shadow: 0 0 30px rgba(100, 150, 255, 0.4);
+      filter: drop-shadow(0 0 12px rgba(100, 150, 255, 0.5));
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      margin: 0 auto 28px;
+    }
+
+    @media (max-width: 500px) {
+      .wheel-wrapper {
+        width: 280px;
+        height: 280px;
+      }
+    }
+
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        #f5c542 0deg 45deg,
+        #4a6cf0 45deg 90deg,
+        #ed6a5e 90deg 135deg,
+        #5ac47a 135deg 180deg,
+        #b36ae0 180deg 225deg,
+        #f09b3e 225deg 270deg,
+        #3f8ef0 270deg 315deg,
+        #e05a8a 315deg 360deg
+      );
+      box-shadow: 0 0 0 8px #1b2238, 0 0 0 12px #0b0f1c, 0 25px 35px black;
+      transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+      position: relative;
+      border: 2px solid #9bb6ff;
+    }
+
+    .wheel-labels {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .wheel-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0 0;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.7);
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    @media (max-width: 500px) {
+      .wheel-label {
+        font-size: 0.9rem;
+      }
+    }
+
+    .wheel::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      background: #ffffff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px #ffffff, 0 0 8px #aaccff;
+      z-index: 5;
+      border: 3px solid #1e2438;
+    }
+
+    .pointer {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3rem;
+      filter: drop-shadow(0 10px 6px black);
+      z-index: 10;
+      text-shadow: 0 0 12px #f0f5ff;
+      color: #ffd966;
+      line-height: 1;
+    }
+
+    .progress-hint {
+      font-size: 0.95rem;
+      color: #8a9bb5;
+      margin-bottom: 16px;
+      text-align: center;
+      background: #0c1120;
+      padding: 8px 20px;
+      border-radius: 40px;
+      border: 1px solid #273152;
+    }
+
+    .progress-hint span {
+      color: #7ef0a0;
+      font-weight: 700;
+    }
+
+    .progress-dots {
+      display: inline-flex;
+      gap: 6px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .progress-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #2a3860;
+      border: 1px solid #4a5a8a;
+      transition: 0.3s;
+    }
+
+    .progress-dot.filled {
+      background: #7ef0a0;
+      box-shadow: 0 0 10px #7ef0a0;
+    }
+
+    .result-box {
+      margin-top: 4px;
+      margin-bottom: 8px;
+      padding: 16px 36px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, #101a33, #0a1020);
+      border: 1px solid #2e3e6b;
+      text-align: center;
+      min-width: 240px;
+      box-shadow: inset 0 0 20px rgba(79, 126, 255, 0.1), 0 10px 25px rgba(0, 0, 0, 0.5);
+      transition: 0.3s;
+      opacity: 0.4;
+    }
+
+    .result-box.flash {
+      border-color: #4f7eff;
+      box-shadow: inset 0 0 30px rgba(79, 126, 255, 0.3), 0 0 30px rgba(79, 126, 255, 0.5);
+      opacity: 1;
+    }
+
+    .result-box.active {
+      opacity: 1;
+      border-color: #ffb347;
+      box-shadow: inset 0 0 30px rgba(255, 179, 71, 0.2), 0 0 30px rgba(255, 179, 71, 0.4);
+    }
+
+    .result-box-label {
+      font-size: 0.95rem;
+      color: #8a9bb5;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .result-box-value {
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #a0c8ff, #6d8cff, #b48aff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 15px #4f7eff);
+      line-height: 1;
+    }
+
+    .luck-verdict {
+      margin-top: 12px;
+      padding: 20px 36px;
+      border-radius: 32px;
+      background: linear-gradient(145deg, #1a2440, #0f1425);
+      border: 2px solid #ffb347;
+      box-shadow: 0 0 40px rgba(255, 179, 71, 0.5), inset 0 0 20px rgba(255, 179, 71, 0.1);
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    .luck-verdict.show {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+      animation: verdictPulse 2s infinite;
+    }
+
+    @keyframes verdictPulse {
+      0%, 100% {
+        box-shadow: 0 0 40px rgba(255, 179, 71, 0.5), inset 0 0 20px rgba(255, 179, 71, 0.1);
+      }
+      50% {
+        box-shadow: 0 0 60px rgba(255, 179, 71, 0.8), inset 0 0 30px rgba(255, 179, 71, 0.2);
+      }
+    }
+
+    .luck-verdict-title {
+      font-size: 1rem;
+      color: #ffd966;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .luck-verdict-percent {
+      font-size: 3.2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffe28c, #ffb347, #ff8c42);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 20px #f0b34b);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .luck-verdict-label {
+      font-size: 1.1rem;
+      color: #ffe5b8;
+      font-weight: 500;
+    }
+
+    .history {
+      color: #7f92bb;
+      font-size: 0.95rem;
+      margin-top: 16px;
+      background: #0c1120;
+      padding: 10px 20px;
+      border-radius: 60px;
+      border: 1px solid #273152;
+      text-align: center;
+      max-width: 100%;
+      word-break: break-word;
+    }
+
+    /* ===== ВКЛАДКА ПОМОЩЬ ===== */
+    .help-container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 10px 0;
+    }
+
+    .help-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #a0c8ff, #6d8cff, #b48aff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 8px;
+      text-align: center;
+      filter: drop-shadow(0 0 12px rgba(100, 150, 255, 0.5));
+    }
+
+    .help-subtitle {
+      text-align: center;
+      color: #8a9bb5;
+      margin-bottom: 28px;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    .help-card {
+      background: linear-gradient(145deg, #101a33, #0a1020);
+      border: 1px solid #2e3e6b;
+      border-radius: 28px;
+      padding: 28px 24px;
+      box-shadow: inset 0 0 25px rgba(79, 126, 255, 0.08), 0 15px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .help-steps {
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .help-steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 16px 16px 16px 68px;
+      margin-bottom: 12px;
+      background: rgba(26, 36, 64, 0.5);
+      border-radius: 20px;
+      border: 1px solid #273152;
+      color: #d0e0ff;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      transition: 0.2s;
+    }
+
+    .help-steps li:hover {
+      background: rgba(42, 56, 96, 0.7);
+      border-color: #4f7eff;
+      transform: translateX(4px);
+    }
+
+    .help-steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #3466e0, #1f44a0);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      box-shadow: 0 0 15px rgba(79, 126, 255, 0.6);
+      border: 2px solid #6d8cff;
+    }
+
+    .help-steps li:last-child {
+      margin-bottom: 0;
+      background: linear-gradient(145deg, #1a3d2a, #0f2a1c);
+      border-color: #5ac47a;
+      color: #c8ffdd;
+    }
+
+    .help-steps li:last-child::before {
+      background: linear-gradient(145deg, #3fa86a, #2a7a4a);
+      box-shadow: 0 0 15px rgba(90, 196, 122, 0.6);
+      border-color: #7ef0a0;
+    }
+
+    .help-steps li strong {
+      color: #ffffff;
+      background: rgba(79, 126, 255, 0.2);
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-weight: 700;
+      border: 1px solid rgba(79, 126, 255, 0.4);
+    }
+
+    .help-steps li code {
+      background: #0b0e17;
+      color: #7ef0a0;
+      padding: 2px 10px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      border: 1px solid #2e3e6b;
+      letter-spacing: 0.5px;
+    }
+
+    .help-note {
+      margin-top: 20px;
+      padding: 16px 22px;
+      background: linear-gradient(145deg, #2a1f0e, #1a1308);
+      border: 1px solid #ffb347;
+      border-radius: 20px;
+      color: #ffe5b8;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      text-align: center;
+      box-shadow: inset 0 0 15px rgba(255, 179, 71, 0.1);
+    }
+
+    .help-note strong {
+      color: #ffd966;
+    }
+
+    footer {
+      text-align: center;
+      color: #3d4a6b;
+      margin-top: 36px;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <h1>🎮 CHILL ZONE</h1>
+  <div class="subhead">место, где можно расслабиться и проверить удачу</div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="timers"><i>⏳</i> Таймер & Секундомер</button>
+    <button class="tab-btn" data-tab="fortune"><i>🎡</i> Проверка на везение</button>
+    <button class="tab-btn" data-tab="help"><i>📱</i> Активация Meta Quest</button>
+  </div>
+
+  <!-- Вкладка с таймером и секундомером -->
+  <div id="timers" class="tab-content active">
+    <div class="grid-2">
+      <div class="card">
+        <h2>⏲️ Таймер</h2>
+        <div class="time-display" id="timerDisplay">05:00</div>
+        <div class="btn-group">
+          <button class="btn btn-primary" id="timerStart">▶ Старт</button>
+          <button class="btn" id="timerPause">⏸ Пауза</button>
+          <button class="btn btn-danger" id="timerReset">⟲ Сброс</button>
+        </div>
+        <div style="margin-top: 20px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+          <button class="btn" data-timer-min="1">1 мин</button>
+          <button class="btn" data-timer-min="5">5 мин</button>
+          <button class="btn" data-timer-min="10">10 мин</button>
+          <button class="btn" data-timer-min="25">25 мин</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>⏱️ Секундомер</h2>
+        <div class="time-display" id="stopwatchDisplay">00:00.00</div>
+        <div class="btn-group">
+          <button class="btn btn-primary" id="stopwatchStart">▶ Старт</button>
+          <button class="btn" id="stopwatchPause">⏸ Пауза</button>
+          <button class="btn btn-danger" id="stopwatchReset">⟲ Сброс</button>
+        </div>
+        <div style="margin-top: 20px; color:#6e82aa; font-size:0.95rem; text-align:center;">
+          миллисекунды для точности
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Вкладка «Проверка на везение» -->
+  <div id="fortune" class="tab-content">
+    <div class="fortune-container">
+      <div class="fortune-title">✨ Проверка на везение ✨</div>
+
+      <div class="progress-hint">
+        До вердикта: <span id="spinsToVerdict">3</span>
+        <div class="progress-dots" id="progressDots">
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+
+      <div class="wheel-wrapper">
+        <div class="pointer">▼</div>
+        <div class="wheel" id="wheel">
+          <div class="wheel-labels" id="wheelLabels"></div>
+        </div>
+      </div>
+
+      <div class="btn-group" style="margin-bottom:16px;">
+        <button class="btn btn-primary" id="spinWheelBtn" style="font-size:1.3rem; padding:16px 40px;">
+          🎲 КРУТИТЬ
+        </button>
+      </div>
+
+      <div class="result-box" id="resultBox">
+        <div class="result-box-label">Твоё везение</div>
+        <div class="result-box-value" id="resultValue">—</div>
+      </div>
+
+      <div class="luck-verdict" id="luckVerdict">
+        <div class="luck-verdict-title">✨ Твой процент везения ✨</div>
+        <div class="luck-verdict-percent" id="verdictPercent">0%</div>
+        <div class="luck-verdict-label" id="verdictLabel">—</div>
+      </div>
+
+      <div id="historyMsg" class="history">Здесь появятся твои результаты</div>
+    </div>
+  </div>
+
+  <!-- Вкладка «Активация Meta Quest» -->
+  <div id="help" class="tab-content">
+    <div class="help-container">
+      <div class="help-title">📱 Активация Meta Quest</div>
+      <div class="help-subtitle">Пошаговая инструкция — просто выполняй по порядку</div>
+
+      <div class="help-card">
+        <ol class="help-steps">
+          <li>Скачай <strong>очень хороший ВПН</strong></li>
+          <li>Включи <strong>ВПН</strong></li>
+          <li>Включи <strong>мобильный хот-спот</strong></li>
+          <li>Нажми <code>Win + R</code>, введи <code>ncpa.cpl</code></li>
+          <li>Найди там свой <strong>ВПН</strong>, нажми <strong>правой кнопкой мыши</strong> и выбери <strong>«Свойства»</strong> → вкладка <strong>«Доступ»</strong></li>
+          <li>Выбери там <strong>«Подключение по локальной сети»</strong> — то, где рядом стоит <strong>цифра</strong></li>
+          <li>На шлеме <strong>подключись к этой сети</strong> — и он сам начнёт обновляться 🚀</li>
+        </ol>
+
+        <div class="help-note">
+          💡 <strong>Совет:</strong> если обновление не стартует — перезагрузи шлем и проверь, что ВПН на ПК всё ещё активен.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>⚡ chill zone · играй · отдыхай · испытывай удачу ⚡</footer>
+</div>
+
+<script>
+  (function() {
+    // ========== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ==========
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.dataset.tab;
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // ========== ТАЙМЕР ==========
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerStart = document.getElementById('timerStart');
+    const timerPause = document.getElementById('timerPause');
+    const timerReset = document.getElementById('timerReset');
+    const timerMinButtons = document.querySelectorAll('[data-timer-min]');
+
+    let timerSeconds = 300;
+    let timerInterval = null;
+    let timerRunning = false;
+
+    function formatTimer(sec) {
+      if (sec < 0) sec = 0;
+      const mins = Math.floor(sec / 60);
+      const secs = sec % 60;
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function updateTimerDisplay() {
+      timerDisplay.textContent = formatTimer(timerSeconds);
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      timerRunning = false;
+    }
+
+    function startTimer() {
+      if (timerRunning) return;
+      if (timerSeconds <= 0) return;
+      timerRunning = true;
+      timerInterval = setInterval(() => {
+        if (timerSeconds > 0) {
+          timerSeconds--;
+          updateTimerDisplay();
+        }
+        if (timerSeconds <= 0) {
+          stopTimer();
+          timerRunning = false;
+          timerDisplay.textContent = "00:00";
+          timerDisplay.style.color = '#ffb86b';
+          setTimeout(() => timerDisplay.style.color = '', 800);
+        }
+      }, 1000);
+    }
+
+    function resetTimer() {
+      stopTimer();
+      timerSeconds = 300;
+      updateTimerDisplay();
+      timerRunning = false;
+      timerDisplay.style.color = '';
+    }
+
+    timerStart.addEventListener('click', startTimer);
+    timerPause.addEventListener('click', () => {
+      if (timerRunning) {
+        stopTimer();
+        timerRunning = false;
+      }
+    });
+    timerReset.addEventListener('click', resetTimer);
+
+    timerMinButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mins = parseInt(btn.dataset.timerMin, 10);
+        if (!isNaN(mins) && mins > 0) {
+          stopTimer();
+          timerSeconds = mins * 60;
+          updateTimerDisplay();
+          timerRunning = false;
+          timerDisplay.style.color = '';
+        }
+      });
+    });
+
+    updateTimerDisplay();
+
+    // ========== СЕКУНДОМЕР ==========
+    const stopwatchDisplay = document.getElementById('stopwatchDisplay');
+    const stopwatchStart = document.getElementById('stopwatchStart');
+    const stopwatchPause = document.getElementById('stopwatchPause');
+    const stopwatchReset = document.getElementById('stopwatchReset');
+
+    let stopwatchMs = 0;
+    let stopwatchInterval = null;
+    let stopwatchRunning = false;
+    let stopwatchStartTime = 0;
+    let stopwatchElapsed = 0;
+
+    function formatStopwatch(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      const hundredths = Math.floor((ms % 1000) / 10);
+      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${hundredths.toString().padStart(2, '0')}`;
+    }
+
+    function updateStopwatchDisplay() {
+      stopwatchDisplay.textContent = formatStopwatch(stopwatchMs);
+    }
+
+    function stopStopwatch() {
+      if (stopwatchInterval) {
+        clearInterval(stopwatchInterval);
+        stopwatchInterval = null;
+      }
+      stopwatchRunning = false;
+    }
+
+    function startStopwatch() {
+      if (stopwatchRunning) return;
+      stopwatchRunning = true;
+      stopwatchStartTime = Date.now() - stopwatchElapsed;
+      stopwatchInterval = setInterval(() => {
+        stopwatchMs = Date.now() - stopwatchStartTime;
+        stopwatchElapsed = stopwatchMs;
+        updateStopwatchDisplay();
+      }, 20);
+    }
+
+    function pauseStopwatch() {
+      if (stopwatchRunning) {
+        stopStopwatch();
+        stopwatchElapsed = stopwatchMs;
+      }
+    }
+
+    function resetStopwatch() {
+      stopStopwatch();
+      stopwatchMs = 0;
+      stopwatchElapsed = 0;
+      stopwatchRunning = false;
+      updateStopwatchDisplay();
+    }
+
+    stopwatchStart.addEventListener('click', startStopwatch);
+    stopwatchPause.addEventListener('click', pauseStopwatch);
+    stopwatchReset.addEventListener('click', resetStopwatch);
+
+    resetStopwatch();
+
+    // ========== ПРОВЕРКА НА ВЕЗЕНИЕ (КОЛЕСО) ==========
+    const wheel = document.getElementById('wheel');
+    const wheelLabels = document.getElementById('wheelLabels');
+    const spinBtn = document.getElementById('spinWheelBtn');
+    const spinsToVerdictSpan = document.getElementById('spinsToVerdict');
+    const progressDots = document.querySelectorAll('#progressDots .progress-dot');
+    const resultBox = document.getElementById('resultBox');
+    const resultValue = document.getElementById('resultValue');
+    const luckVerdict = document.getElementById('luckVerdict');
+    const verdictPercent = document.getElementById('verdictPercent');
+    const verdictLabel = document.getElementById('verdictLabel');
+    const historyMsg = document.getElementById('historyMsg');
+
+    const WHEEL_PERCENTS = [0, 10, 25, 50, 75, 90, 95, 100];
+
+    let isSpinning = false;
+    let currentRotation = 0;
+    const spinHistory = [];
+    let currentStreak = [];
+
+    function formatResult(value) {
+      if (value === 50) return '50';
+      return `${value}%`;
+    }
+
+    function createWheelLabels() {
+      wheelLabels.innerHTML = '';
+      const sectorAngle = 360 / WHEEL_PERCENTS.length;
+
+      WHEEL_PERCENTS.forEach((percent, index) => {
+        const label = document.createElement('div');
+        label.className = 'wheel-label';
+        label.textContent = formatResult(percent);
+
+        const angle = index * sectorAngle + sectorAngle / 2;
+        const radiusPercent = 35;
+
+        label.style.transform = `rotate(${angle}deg) translate(${radiusPercent * 1.7}px) rotate(-${angle}deg)`;
+
+        wheelLabels.appendChild(label);
+      });
+    }
+
+    createWheelLabels();
+
+    function updateProgressUI() {
+      const spinsInCurrentCycle = currentStreak.length;
+      const remaining = 3 - spinsInCurrentCycle;
+      spinsToVerdictSpan.textContent = remaining > 0 ? remaining : 0;
+
+      progressDots.forEach((dot, i) => {
+        if (i < spinsInCurrentCycle) {
+          dot.classList.add('filled');
+        } else {
+          dot.classList.remove('filled');
+        }
+      });
+    }
+
+    function getVerdictLabel(percent) {
+      if (percent >= 85) return '🔥 Невероятное везение!';
+      if (percent >= 70) return '✨ Отличная удача!';
+      if (percent >= 50) return '👍 Хороший результат';
+      if (percent >= 30) return '😐 Средне, но жить можно';
+      if (percent >= 15) return '😬 Не твой день...';
+      return '💀 Полный провал';
+    }
+
+    function updateAfterSpin(luckPercent) {
+      spinHistory.push(luckPercent);
+      currentStreak.push(luckPercent);
+
+      updateProgressUI();
+
+      if (currentStreak.length >= 3) {
+        const sum = currentStreak.reduce((acc, val) => acc + val, 0);
+        const average = Math.round(sum / currentStreak.length);
+
+        resultValue.textContent = formatResult(average);
+        resultBox.classList.add('active', 'flash');
+        setTimeout(() => resultBox.classList.remove('flash'), 1000);
+
+        setTimeout(() => {
+          verdictPercent.textContent = `${average}%`;
+          verdictLabel.textContent = getVerdictLabel(average);
+          luckVerdict.classList.add('show');
+
+          setTimeout(() => {
+            luckVerdict.classList.remove('show');
+          }, 6000);
+        }, 300);
+
+        currentStreak = [];
+        setTimeout(() => {
+          updateProgressUI();
+        }, 300);
+      }
+
+      const lastFive = spinHistory.slice(-5);
+      let historyText = '📋 Последние: ' + lastFive.map(p => formatResult(p)).join(' · ');
+      if (spinHistory.length > 5) {
+        historyText += ` (всего ${spinHistory.length})`;
+      }
+      historyMsg.textContent = historyText;
+    }
+
+    function spinWheel() {
+      if (isSpinning) return;
+
+      isSpinning = true;
+      spinBtn.disabled = true;
+      spinBtn.style.opacity = '0.7';
+
+      luckVerdict.classList.remove('show');
+
+      const sectorAngle = 360 / WHEEL_PERCENTS.length;
+      const randomSectorIndex = Math.floor(Math.random() * WHEEL_PERCENTS.length);
+
+      const sectorCenterAngle = randomSectorIndex * sectorAngle + sectorAngle / 2;
+      const fullTurns = 3 + Math.floor(Math.random() * 4);
+      const targetRotation = fullTurns * 360 + (360 - sectorCenterAngle);
+
+      currentRotation += targetRotation;
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+      const luckPercent = WHEEL_PERCENTS[randomSectorIndex];
+
+      setTimeout(() => {
+        isSpinning = false;
+        spinBtn.disabled = false;
+        spinBtn.style.opacity = '1';
+        updateAfterSpin(luckPercent);
+      }, 4000);
+    }
+
+    spinBtn.addEventListener('click', spinWheel);
+
+    updateProgressUI();
+
+    window.addEventListener('resize', () => {
+      clearTimeout(window._wheelResizeTimeout);
+      window._wheelResizeTimeout = setTimeout(createWheelLabels, 150);
+    });
+  })();
+</script>
+</body>
+</html>
